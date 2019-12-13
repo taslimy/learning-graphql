@@ -7,34 +7,47 @@ import { GraphQLServer } from "graphql-yoga";
 // the useage of a ! means it will always return as the things it is ex: boolean has to be a boolean
 const typeDefs = `
 type Query {
-  
-  title: String!
-  price: Float!
-  releaseYear: Int
-  rating: Float
-  inStock: Boolean!
+  me: User!
+  post: Post!
 
 }
+
+type User {
+  id:  ID!
+  name: String!
+  email: String!
+  age: Int
+
+}
+
+type Post {
+  id: ID!
+  title: String!
+  body: String!
+  published: Boolean!
+}
+
 `;
 
 // Resolvers
 
 const resolvers = {
   Query: {
-    title() {
-      return "Gone Girl";
+    me() {
+      return {
+        id: "12394",
+        name: "Tas",
+        email: "taslimer@gmail.com",
+        age: "25"
+      };
     },
-    price() {
-      return "9.92";
-    },
-    releaseYear() {
-      return "2014";
-    },
-    rating() {
-      return "8.4";
-    },
-    inStock() {
-      return false;
+    post() {
+      return {
+        id: "1234",
+        title: "A book",
+        body: "Lorem Ipsum sum sum sum nro eugh mena",
+        published: false
+      };
     }
   }
 };
