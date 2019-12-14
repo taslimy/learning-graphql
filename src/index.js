@@ -7,6 +7,8 @@ import { GraphQLServer } from "graphql-yoga";
 // the useage of a ! means it will always return as the things it is ex: boolean has to be a boolean
 const typeDefs = `
 type Query {
+  greeting(name: String age: Int): String!
+  add(a: Float! b: Float!): Float!
   me: User!
   post: Post!
 
@@ -33,6 +35,16 @@ type Post {
 
 const resolvers = {
   Query: {
+    add(parent, args, ctx, info) {
+      return args.a + args.b;
+    },
+    greeting(parent, args, ctx, info) {
+      if ((args.name, args.age)) {
+        return `Hello, ${args.name}! Your are ${args.age} old!`;
+      } else {
+        return "Hello!";
+      }
+    },
     me() {
       return {
         id: "12394",
