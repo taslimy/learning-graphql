@@ -34,19 +34,22 @@ const posts = [
     id: 1,
     title: "Lorem Ipsum",
     body: "Quisque iaculis a leo quis viverra",
-    published: true
+    published: true,
+    author: 1
   },
   {
     id: 2,
     title: " Sed sagittis quam",
     body: ". Curabitur vitae leo sollicitudin",
-    published: false
+    published: false,
+    author: 1
   },
   {
     id: 3,
     title: "efficitur nunc",
     body: "Proin non dolor porta, congue lacus eget",
-    published: false
+    published: false,
+    author: 2
   }
 ];
 
@@ -72,6 +75,7 @@ type Post {
   title: String!
   body: String!
   published: Boolean!
+  author: User!
 }
 
 `;
@@ -94,7 +98,12 @@ const resolvers = {
         return posts;
       }
       return posts.filter(x => {
-        return x.title.toLowerCase().includes(args.query.toLowerCase() || x.body.toLowerCase().includes(args.query.toLowerCase()));
+        return x.title
+          .toLowerCase()
+          .includes(
+            args.query.toLowerCase() ||
+              x.body.toLowerCase().includes(args.query.toLowerCase())
+          );
       });
     },
     me() {
@@ -104,6 +113,13 @@ const resolvers = {
         email: "taslimer@gmail.com",
         age: "25"
       };
+    }
+  },
+  Post: {
+    author(parent, args, ctx, info) {
+      return users.find(x => {
+        return x.id === parent.author;
+      });
     }
   }
 };
