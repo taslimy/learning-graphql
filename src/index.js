@@ -4,11 +4,12 @@ import { GraphQLServer } from "graphql-yoga";
 
 // Type definitions (schema)
 
-// the useage of a ! means it will always return as the things it is ex: boolean has to be a boolean
+// the useage of a ! means it will always return as the things it is ex: boolean has to be a boolean, or cannot be empty or incorrect type.
 const typeDefs = `
 type Query {
   greeting(name: String age: Int): String!
-  add(a: Float! b: Float!): Float!
+  add(numbers: [Float!]!): Float!
+  grades: [Int!]!
   me: User!
   post: Post!
 
@@ -35,8 +36,18 @@ type Post {
 
 const resolvers = {
   Query: {
+    grades(parent, args, ctx, info) {
+      return [98, 80, 93]
+    },
     add(parent, args, ctx, info) {
-      return args.a + args.b;
+      if(args.numbers.length <= 0) {
+        return 0
+      }
+
+      //[4,5,6,7,12]
+      return args.numbers.reduce((acc, curr) => {
+        return acc + curr
+      })
     },
     greeting(parent, args, ctx, info) {
       if ((args.name, args.age)) {
