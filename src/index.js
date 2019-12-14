@@ -5,13 +5,57 @@ import { GraphQLServer } from "graphql-yoga";
 // Type definitions (schema)
 
 // the useage of a ! means it will always return as the things it is ex: boolean has to be a boolean, or cannot be empty or incorrect type.
+
+// Fake users
+const users = [
+  {
+    id: 1,
+    name: "Tas",
+    email: "tas@tas.me",
+    age: 25
+  },
+  {
+    id: 2,
+    name: "Sarah",
+    email: "sarah@example.com",
+    age: 22
+  },
+  {
+    id: 3,
+    name: "james",
+    email: "james@example.com"
+  }
+];
+
+// Fake posts
+
+const posts = [
+  {
+    id: 1,
+    title: "Lorem Ipsum",
+    body: "Quisque iaculis a leo quis viverra",
+    published: true
+  },
+  {
+    id: 2,
+    title: " Sed sagittis quam",
+    body: ". Curabitur vitae leo sollicitudin",
+    published: false
+  },
+  {
+    id: 3,
+    title: "efficitur nunc",
+    body: "Proin non dolor porta, congue lacus eget",
+    published: false
+  }
+];
+
 const typeDefs = `
 type Query {
-  greeting(name: String age: Int): String!
-  add(numbers: [Float!]!): Float!
-  grades: [Int!]!
+  users(query: String): [User!]!
   me: User!
-  post: Post!
+  post(query: String): [Post!]!
+ 
 
 }
 
@@ -36,25 +80,22 @@ type Post {
 
 const resolvers = {
   Query: {
-    grades(parent, args, ctx, info) {
-      return [98, 80, 93]
-    },
-    add(parent, args, ctx, info) {
-      if(args.numbers.length <= 0) {
-        return 0
+    users(parent, args, ctx, info) {
+      if (!args.query) {
+        return users;
       }
 
-      //[4,5,6,7,12]
-      return args.numbers.reduce((acc, curr) => {
-        return acc + curr
-      })
+      return users.filter(x => {
+        return x.name.toLowerCase().includes(args.query.toLowerCase());
+      });
     },
-    greeting(parent, args, ctx, info) {
-      if ((args.name, args.age)) {
-        return `Hello, ${args.name}! Your are ${args.age} old!`;
-      } else {
-        return "Hello!";
+    post(parent, args, ctx, info) {
+      if (!args.query) {
+        return posts;
       }
+      return posts.filter(x => {
+        return x.title.toLowerCase().includes(args.query.toLowerCase() || x.body.toLowerCase().includes(args.query.toLowerCase()));
+      });
     },
     me() {
       return {
@@ -62,14 +103,6 @@ const resolvers = {
         name: "Tas",
         email: "taslimer@gmail.com",
         age: "25"
-      };
-    },
-    post() {
-      return {
-        id: "1234",
-        title: "A book",
-        body: "Lorem Ipsum sum sum sum nro eugh mena",
-        published: false
       };
     }
   }
