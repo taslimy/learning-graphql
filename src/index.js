@@ -24,6 +24,11 @@ const users = [
     id: 3,
     name: "james",
     email: "james@example.com"
+  },
+  {
+    id: 4,
+    name: "dust",
+    email: "dust@example.com"
   }
 ];
 
@@ -50,6 +55,13 @@ const posts = [
     body: "Proin non dolor porta, congue lacus eget",
     published: false,
     author: 2
+  },
+  {
+    id: 4,
+    title: "the story of dust",
+    body: "it all started when the fire nation attacked.",
+    published: true,
+    author: 4
   }
 ];
 
